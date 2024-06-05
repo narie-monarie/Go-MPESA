@@ -2,6 +2,10 @@
 
 NB: This project is still in development and works with golang 1.22+
 
+
+```sh
+go get -u github.com/narie-monarie/Go-MPESA
+```
 ```go
 
 package main
