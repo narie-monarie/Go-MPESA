@@ -21,8 +21,11 @@ func NewConfig(config Config) *Config {
 }
 
 func (c *Config) GetAuth() (string, error) {
+
 	url := "https://sandbox.safaricom.co.ke/oauth/v1/generate?grant_type=client_credentials"
-	authorizationString := base64.StdEncoding.EncodeToString([]byte(c.ConsumerKey + ":" + c.ConsumerSecret))
+	authorizationString := base64.StdEncoding.EncodeToString(
+		[]byte(c.ConsumerKey + ":" + c.ConsumerSecret),
+	)
 
 	client := &http.Client{}
 	req, err := http.NewRequest("GET", url, nil)

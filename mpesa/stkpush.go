@@ -22,7 +22,6 @@ type STKPushRequest struct {
 	TransactionDesc   string
 }
 
-// MPESAExpress performs an MPESA Express (STK Push) request.
 func (c *Config) MPESAExpress(params STKPushRequest, w http.ResponseWriter, r *http.Request) {
 	accessToken, err := c.GetAuth()
 	if err != nil {
@@ -36,14 +35,7 @@ func (c *Config) MPESAExpress(params STKPushRequest, w http.ResponseWriter, r *h
 	}
 
 	now := time.Now()
-	timestamp := fmt.Sprintf("%d%02d%02d%02d%02d%02d",
-		now.Year(),
-		int(now.Month()),
-		now.Day(),
-		now.Hour(),
-		now.Minute(),
-		now.Second(),
-	)
+	timestamp := fmt.Sprintf("%d%02d%02d%02d%02d%02d", now.Year(), int(now.Month()), now.Day(), now.Hour(), now.Minute(), now.Second())
 
 	password := base64.StdEncoding.EncodeToString([]byte(fmt.Sprintf("%s%s%s", params.BusinessShortCode, c.PassKey, timestamp)))
 
@@ -59,7 +51,19 @@ func (c *Config) MPESAExpress(params STKPushRequest, w http.ResponseWriter, r *h
 		"CallBackURL": "%s",
 		"AccountReference": "%s",
 		"TransactionDesc": "%s"
-	}`, params.BusinessShortCode, password, timestamp, params.TransactionType, params.Amount, params.PartyA, params.PartyB, params.PhoneNumber, params.CallBackURL, params.AccountReference, params.TransactionDesc))
+	}`, params.BusinessShortCode,
+		password,
+		timestamp,
+		params.TransactionType,
+		params.Amount,
+		params.PartyA,
+		params.PartyB,
+		params.PhoneNumber,
+		params.CallBackURL,
+		params.AccountReference,
+		params.TransactionDesc,
+	),
+	)
 
 	client := &http.Client{}
 	req, err := http.NewRequest("POST", "https://sandbox.safaricom.co.ke/mpesa/stkpush/v1/processrequest", payload)

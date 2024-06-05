@@ -4,7 +4,7 @@ NB: This project is still in development and works with golang 1.22+
 
 
 ```sh
-go get -u github.com/narie-monarie/Go-MPESA
+go get -u github.com/narie-monarie/Go-MPESA@v1.0.1
 ```
 ```go
 
@@ -13,18 +13,15 @@ package main
 import (
 	"fmt"
 	"net/http"
-
-	"github.com/monari-onsongo/go-mm/mpesa"
+	"github.com/narie-monarie/Go-MPESA"
 )
 
 func main() {
-	conf := mpesa.NewConfig(
-		mpesa.Config{
+	conf := mpesa.NewConfig(mpesa.Config{
 			ConsumerKey:    "",
 			ConsumerSecret: "",
 			PassKey:        "",
-		},
-	)
+		})
 
 	http.HandleFunc("/stkPush", func(w http.ResponseWriter, r *http.Request) {
 		params := mpesa.STKPushRequest{
