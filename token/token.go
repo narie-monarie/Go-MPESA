@@ -11,16 +11,12 @@ type AccessTokenResponse struct {
 	ExpiresIn   string `json:"expires_in"`
 }
 
-func GetAccessToken() (string, error) {
+func GetAccessToken(consumerKey, consumerSecret string) (string, error) {
 	url := "https://sandbox.safaricom.co.ke/oauth/v1/generate?grant_type=client_credentials"
-	consumerKey := ""
-	consumerSecret := ""
-
 	authorizationString := base64.StdEncoding.EncodeToString([]byte(consumerKey + ":" + consumerSecret))
 
 	client := &http.Client{}
 	req, err := http.NewRequest("GET", url, nil)
-
 	if err != nil {
 		return "", err
 	}
@@ -29,15 +25,12 @@ func GetAccessToken() (string, error) {
 	req.Header.Add("Authorization", "Basic "+authorizationString)
 
 	res, err := client.Do(req)
-
 	if err != nil {
 		return "", err
 	}
-
 	defer res.Body.Close()
 
 	var accessTokenResponse AccessTokenResponse
-
 	if err := json.NewDecoder(res.Body).Decode(&accessTokenResponse); err != nil {
 		return "", err
 	}
